@@ -1,0 +1,7 @@
+name: nox-plugin-case-bundle
+version: 0.1.0
+track: agent-assistance
+description: Bundle related security indicators into clustered findings for faster triage
+tools:
+  - name: scan
+    description: Scan source files and bundle related security indicators into clustered findings

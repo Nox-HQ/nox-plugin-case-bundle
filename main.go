@@ -190,7 +190,7 @@ func scanFileForClusters(resp *sdk.ResponseBuilder, filePath, ext string) error 
 	if err != nil {
 		return nil // skip unreadable files
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 
 	// Collect indicators by category.
 	categoryIndicators := make(map[string][]indicator)
@@ -274,12 +274,17 @@ func extToLanguage(ext string) string {
 }
 
 func main() {
+	os.Exit(run())
+}
+
+func run() int {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
 
 	srv := buildServer()
 	if err := srv.Serve(ctx); err != nil {
 		fmt.Fprintf(os.Stderr, "nox-plugin-case-bundle: %v\n", err)
-		os.Exit(1)
+		return 1
 	}
+	return 0
 }
